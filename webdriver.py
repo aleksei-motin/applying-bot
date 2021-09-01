@@ -7,7 +7,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 import pickle
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
+from selenium.common.exceptions import NoSuchElementException
 
 options = webdriver.FirefoxOptions()
 options.set_preference('dom.webnotifications.enabled', False)
