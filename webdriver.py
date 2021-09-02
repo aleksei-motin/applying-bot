@@ -11,35 +11,38 @@ from selenium.common.exceptions import NoSuchElementException
 
 class Driver():
 
-    def setDriverOptions(self):
-
+    def __init__(self):
         self.options = webdriver.FirefoxOptions()
         self.options.set_preference('dom.webnotifications.enabled', False)
         self.options.set_preference('media.volume_scale', '0.0')
+        instance = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 
-    def initDriverInstance(self):
-        self.driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+    def goToStartPage(self, instance, url):
+        instance.get(url)
+        instance.implicitly_wait(10)
 
-    def goToStartPage(self, url):
-        self.driver.get(url)
-        self.driver.implicitly_wait(10)
+    def saveCookies(self, instance, filename: str):
+        pickle.dump(instance.get_cookies(), open(filename, 'wb'))
 
-    def saveCookies(self, filename: str):
-        pickle.dump(self.driver.get_cookies(), open(filename, 'wb'))
-
-    def loadCookies(self, filename: str):
+    def loadCookies(self, instance, filename: str):
         for cookie in pickle.load(open(filename, 'rb')):
-            self.driver.add_cookie(cookie)
-        self.driver.refresh()
+            instance.add_cookie(cookie)
+        instance.refresh()
 
-    def findElementByXpath(self, arg):
-        self.driver.find_element(By.XPATH, arg)
+    def findElementByXpath(self, instance, locator, path=By.XPATH):
+        instance.find_element(path, locator)
 
-    def findElementByClassName(self, arg):
-        self.driver.find_element(By.CLASS_NAME, arg)
+    def findElementByClassName(self, instance, locator, path=By.CLASS_NAME):
+        instance.find_element(path, locator)
 
     def writeText(self, instance, keywords):
         instance.send_keys(keywords)
 
     def pushKeys(self, instance, keys=Keys.ENTER):
         instance.send_keys(keys)
+
+    def current_url(self, instance):
+        instance.current_url()
+
+    def cover_letter_iframe(self, instance, locator, path=By.CLASS_NAME,):
+        instance.find_element(path, locator)

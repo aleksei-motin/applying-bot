@@ -10,9 +10,6 @@ class BasePage():
 
     def startWork(self, url):
         self.browser = Driver()
-        self.browser.setDriverOptions()
-        self.browser.setDriverOptions()
-        self.browser.initDriverInstance()
         self.browser.goToStartPage(url)
         self.browser.loadCookies(filename="cookies")
 
@@ -32,25 +29,15 @@ class HomePageObject(BasePage):
 class SearchPageObject(BasePage):
 
     def checkCurrentUrl(self):
-        self.current_url = driver.self.current_url
+        self.current_url = self.browser.current_url(self.browser)
         self.current_url_path = urlparse(self.current_url).path
 
-    def checkIfSearchPage(self):
+    def checkPage(self):
         if self.current_url_path.startswith("search"):
             pass
-        else:
-            pass
-
-    def checkCoverLetter(self):
-        if_iframe = driver.find_element(By.CLASS_NAME,
-                                        L.cover_letter_iframe_class)
-        if if_iframe:
-            pass
-        else:
-            pass
-
-    def checkApplicantTest(self):
-        if current_url.startswith("applicant"):
+            if self.browser.findElementByClassName(self.browser, ):
+                pass
+        elif self.current_url_path.startswith("applicant"):
             pass
         else:
             pass
