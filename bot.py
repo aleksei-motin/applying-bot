@@ -2,11 +2,13 @@ from webdriver import *
 from search_PO import Search as S
 import time
 from urllib.parse import urlparse
+from . import locators as L
+
 
 def main():
 
     # Заходит на главную страницу
-    driver.get("https://hh.ru")
+    driver.get(L.home_page_xpath)
     driver.implicitly_wait(10)
 
     # Сохраняет куки (запустить единожды, чтобы залогиниться и пройти капчу)
@@ -19,7 +21,7 @@ def main():
 
     # Вводит ключевые слова и начинает поиск
     driver.find_element(
-        By.XPATH, '//input[@data-qa="search-input"]').\
+        By.XPATH, L.search_box_xpath).\
         send_keys("Junior Python developer", Keys.ENTER)
 
     # Собирает данные о текущей странице
@@ -33,7 +35,7 @@ def main():
         pass
 
     # .bloko-modal - класс iframe для сопроводительного
-    if_iframe = driver.find_element(By.CLASS_NAME, '.bloko-modal')
+    if_iframe = driver.find_element(By.CLASS_NAME, L.cover_letter_iframe_class)
     if if_iframe:
         pass
     else:
@@ -47,9 +49,7 @@ def main():
 
 
     # Скроллит до видимости и нажимает на кнопку "Откликнуться"
-    submit_apply_buttons = driver.find_element(
-        By.XPATH, '//a[@data-qa="vacancy-serp__vacancy_response"]').\
-        click()
+    submit_apply_buttons = driver.find_element(By.XPATH, L.apply_button_xpath).click()
 
     while submit_apply_buttons:
         for button in submit_apply_buttons:
@@ -58,9 +58,8 @@ def main():
 
     # Возвращается на предыдущую страницу
     driver.back()
-
     # Проверяет не добавлена ли уже вакансия в избранное и сохраняет, если false (юзать после driver.back())
-    mark = driver.find_element(By.XPATH, '//span[@data-qa="vacancy-search-mark-favorite-false"]')
+    mark = driver.find_element(By.XPATH, L.mark_favorites)
     if mark == "vacancy-search-mark-favorite_false":
         pass # .click() для добавление в избранное
     else:
